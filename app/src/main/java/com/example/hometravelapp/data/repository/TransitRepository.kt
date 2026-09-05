@@ -235,6 +235,7 @@ class TransitRepository(
                 headsign = "Kivenlahti",
                 departureCountdownText = "",
                 isRealtime = true,
+                ticketZones = "AB",
                 legs = listOf(
                     JourneyLeg(VehicleMode.OTHER, null, null, "Alkupiste", "Rautatientori (M)", 3, 250, now + 120, false),
                     JourneyLeg(VehicleMode.SUBWAY, "M1", "Kivenlahti", "Rautatientori (M)", "Kamppi (M)", 8, 2000, now + 300, true),
@@ -250,6 +251,7 @@ class TransitRepository(
                 headsign = "Kannelmäki",
                 departureCountdownText = "",
                 isRealtime = true,
+                ticketZones = "AB",
                 legs = listOf(
                     JourneyLeg(VehicleMode.OTHER, null, null, "Alkupiste", "Elielinaukio", 4, 320, now + 180, false),
                     JourneyLeg(VehicleMode.BUS, "40", "Kannelmäki", "Elielinaukio", "Kohde", 11, 4500, now + 420, true),
@@ -265,6 +267,7 @@ class TransitRepository(
                 headsign = "Länsiterminaali T2",
                 departureCountdownText = "",
                 isRealtime = false,
+                ticketZones = "A",
                 legs = listOf(
                     JourneyLeg(VehicleMode.TRAM, "7", "Länsiterminaali T2", "Alkupiste", "Kohde", 22, 1200, now + 300, false)
                 )

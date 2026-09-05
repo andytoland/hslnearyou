@@ -190,9 +190,17 @@ class DigitransitApiClient(
                     }
                     from {
                       name
+                      stop {
+                        code
+                        zoneId
+                      }
                     }
                     to {
                       name
+                      stop {
+                        code
+                        zoneId
+                      }
                     }
                   }
                 }
@@ -254,6 +262,14 @@ class DigitransitApiClient(
                 val startEpochSec = if (itin.startTime > 10_000_000_000L) itin.startTime / 1000 else itin.startTime
                 val endEpochSec = if (itin.endTime > 10_000_000_000L) itin.endTime / 1000 else itin.endTime
 
+                val allZones = mutableSetOf<String>()
+                itin.legs.forEach { leg ->
+                    leg.from?.stop?.zoneId?.let { allZones.add(it) }
+                    leg.to?.stop?.zoneId?.let { allZones.add(it) }
+                }
+                val sortedZones = allZones.filter { it.isNotBlank() }.sorted()
+                val ticketZonesText = if (sortedZones.isNotEmpty()) sortedZones.joinToString("") else "AB"
+
                 val legs = itin.legs.map { leg ->
                     val legStartSec = if (leg.startTime > 10_000_000_000L) leg.startTime / 1000 else leg.startTime
                     val legDurationMin = ((leg.duration / 60.0) + 0.5).toInt()
@@ -289,6 +305,7 @@ class DigitransitApiClient(
                     headsign = headsignText,
                     departureCountdownText = "",
                     isRealtime = isRealtime,
+                    ticketZones = ticketZonesText,
                     legs = legs
                 )
             }

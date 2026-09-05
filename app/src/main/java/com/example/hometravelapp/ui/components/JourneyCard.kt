@@ -97,7 +97,7 @@ fun JourneyCard(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "${journey.durationMinutes} min matka yhteensä",
+                        text = "${journey.durationMinutes} min • Vyöhyke: ${journey.ticketZones}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1

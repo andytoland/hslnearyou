@@ -104,7 +104,7 @@ fun SavedJourneysDialog(
                                         }
                                         Spacer(modifier = Modifier.height(2.dp))
                                         Text(
-                                            text = "Lähtö: ${journey.departureTimeStr} (${journey.durationMinutes} min matka)",
+                                            text = "Lähtö: ${journey.departureTimeStr} • Vyöhyke: ${journey.ticketZones} (${journey.durationMinutes} min)",
                                             style = MaterialTheme.typography.bodyMedium,
                                             fontWeight = FontWeight.Bold
                                         )

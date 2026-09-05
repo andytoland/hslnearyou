@@ -300,6 +300,7 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
             headsign = journey.headsign,
             departureTimeStr = timeStr,
             durationMinutes = journey.durationMinutes,
+            ticketZones = journey.ticketZones,
             legsSummary = legsSummary
         )
         repository.saveJourney(saved)

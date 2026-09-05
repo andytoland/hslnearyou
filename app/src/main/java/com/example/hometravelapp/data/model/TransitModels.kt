@@ -246,7 +246,8 @@ data class PlaceDto(
 
 @Serializable
 data class StopDto(
-    val code: String? = null
+    val code: String? = null,
+    val zoneId: String? = null
 )
 
 // UI Domain Models for Journey / Itineraries
@@ -259,6 +260,7 @@ data class JourneyOption(
     val headsign: String,
     val departureCountdownText: String,
     val isRealtime: Boolean,
+    val ticketZones: String = "AB",
     val legs: List<JourneyLeg>
 ) {
     fun formattedDepartureTime(currentEpochSeconds: Long = Instant.now().epochSecond): String {
@@ -298,6 +300,7 @@ data class SavedJourney(
     val headsign: String,
     val departureTimeStr: String,
     val durationMinutes: Int,
+    val ticketZones: String = "AB",
     val legsSummary: String,
     val savedAtEpochSeconds: Long = Instant.now().epochSecond
 )
