@@ -11,6 +11,7 @@ import com.example.hometravelapp.data.model.VehicleMode
 import java.time.Instant
 
 import com.example.hometravelapp.data.model.LocationType
+import com.example.hometravelapp.data.model.SavedJourney
 import com.example.hometravelapp.data.model.SavedLocation
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -35,6 +36,7 @@ class TransitRepository(
         private const val KEY_DIGITRANSIT_API_KEY = "digitransit_api_key"
         private const val KEY_SAVED_LOCATIONS = "saved_locations_json"
         private const val KEY_STARTING_LOCATION = "starting_location_json"
+        private const val KEY_SAVED_JOURNEYS = "saved_journeys_json"
 
         val GPS_LOCATION = SavedLocation(
             id = "gps",
@@ -137,6 +139,27 @@ class TransitRepository(
 
     fun resetLocationsToDefault() {
         prefs.edit().putString(KEY_SAVED_LOCATIONS, json.encodeToString(DEFAULT_LOCATIONS)).apply()
+    }
+
+    fun getSavedJourneys(): List<SavedJourney> {
+        val jsonStr = prefs.getString(KEY_SAVED_JOURNEYS, null) ?: return emptyList()
+        return try {
+            json.decodeFromString<List<SavedJourney>>(jsonStr)
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    fun saveJourney(savedJourney: SavedJourney) {
+        val current = getSavedJourneys().toMutableList()
+        current.add(0, savedJourney)
+        val trimmed = current.take(20)
+        prefs.edit().putString(KEY_SAVED_JOURNEYS, json.encodeToString(trimmed)).apply()
+    }
+
+    fun deleteJourney(id: String) {
+        val current = getSavedJourneys().filterNot { it.id == id }
+        prefs.edit().putString(KEY_SAVED_JOURNEYS, json.encodeToString(current)).apply()
     }
 
     suspend fun searchAddress(query: String): List<AddressSearchResult> {

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.LocationOn
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.hometravelapp.ui.components.ApiKeyDialog
 import com.example.hometravelapp.ui.components.JourneyCard
+import com.example.hometravelapp.ui.components.SavedJourneysDialog
 import com.example.hometravelapp.ui.components.StopCard
 
 import androidx.compose.foundation.horizontalScroll
@@ -75,6 +77,7 @@ fun HomeScreen(
     var showSettingsDialog by remember { mutableStateOf(false) }
     var showLocationPickerDialog by remember { mutableStateOf(false) }
     var showStartingLocationDialog by remember { mutableStateOf(false) }
+    var showSavedJourneysDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -90,6 +93,13 @@ fun HomeScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = { showSavedJourneysDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Bookmark,
+                            contentDescription = "Tallennetut reitit",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                     IconButton(onClick = { viewModel.refresh() }) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
@@ -373,13 +383,25 @@ fun HomeScreen(
                             items(
                                 items = state.journeys
                             ) { journey ->
-                                JourneyCard(journey = journey)
+                                JourneyCard(
+                                    journey = journey,
+                                    destinationName = state.selectedLocation.name,
+                                    onSaveJourney = { j, dest -> viewModel.saveJourney(j, dest) }
+                                )
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    if (showSavedJourneysDialog) {
+        SavedJourneysDialog(
+            savedJourneys = state.savedJourneys,
+            onDeleteJourney = { id -> viewModel.deleteSavedJourney(id) },
+            onDismiss = { showSavedJourneysDialog = false }
+        )
     }
 
     if (showSettingsDialog) {

@@ -16,14 +16,19 @@ import kotlinx.coroutines.launch
 
 import com.example.hometravelapp.data.model.JourneyOption
 import com.example.hometravelapp.data.model.LocationType
+import com.example.hometravelapp.data.model.SavedJourney
 import com.example.hometravelapp.data.model.SavedLocation
 import com.example.hometravelapp.data.model.StartingLocation
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 data class TransitUiState(
     val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val stops: List<NearbyStop> = emptyList(),
     val journeys: List<JourneyOption> = emptyList(),
+    val savedJourneys: List<SavedJourney> = emptyList(),
     val isDemoMode: Boolean = false,
     val apiKey: String? = null,
     // Starting location (GPS or manual override)
@@ -51,6 +56,7 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
             isDemoMode = repository.getApiKey().isNullOrBlank(),
             hasLocationPermission = locationTracker.hasLocationPermission(),
             savedLocations = repository.getSavedLocations(),
+            savedJourneys = repository.getSavedJourneys(),
             selectedLocation = repository.getSavedLocations().firstOrNull() ?: TransitRepository.GPS_LOCATION,
             startingLocation = repository.getStartingLocation()
         )
@@ -269,9 +275,34 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
                 delay(30_000)
                 // Trigger state emission so compose recomposes formattedRemainingTime
                 _uiState.update { current ->
-                    current.copy(stops = current.stops.toList())
+                    current.copy(stops = current.stops.toList(), journeys = current.journeys.toList())
                 }
             }
         }
+    }
+
+    fun saveJourney(journey: JourneyOption, destinationName: String) {
+        val legsSummary = journey.legs.joinToString(" ➔ ") { leg ->
+            if (leg.routeShortName != null) "${leg.mode.displayName} (${leg.routeShortName})" else "Kävely (${leg.durationMinutes} min)"
+        }
+        val zonedDateTime = Instant.ofEpochSecond(journey.startTimeEpochSeconds)
+            .atZone(ZoneId.of("Europe/Helsinki"))
+        val timeStr = DateTimeFormatter.ofPattern("HH:mm").format(zonedDateTime)
+
+        val saved = SavedJourney(
+            title = destinationName,
+            primaryRouteBadge = journey.primaryRouteBadge,
+            headsign = journey.headsign,
+            departureTimeStr = timeStr,
+            durationMinutes = journey.durationMinutes,
+            legsSummary = legsSummary
+        )
+        repository.saveJourney(saved)
+        _uiState.update { it.copy(savedJourneys = repository.getSavedJourneys()) }
+    }
+
+    fun deleteSavedJourney(id: String) {
+        repository.deleteJourney(id)
+        _uiState.update { it.copy(savedJourneys = repository.getSavedJourneys()) }
     }
 }

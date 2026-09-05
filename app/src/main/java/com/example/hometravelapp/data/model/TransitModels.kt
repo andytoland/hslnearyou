@@ -11,6 +11,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import java.util.UUID
 
 enum class VehicleMode(val displayName: String, val badgeColor: Color) {
     BUS("Bussi", HslBusBlue),
@@ -287,5 +288,17 @@ data class JourneyLeg(
     val distanceMeters: Int = 0,
     val startTimeEpochSeconds: Long,
     val isRealtime: Boolean
+)
+
+@Serializable
+data class SavedJourney(
+    val id: String = UUID.randomUUID().toString(),
+    val title: String,
+    val primaryRouteBadge: String,
+    val headsign: String,
+    val departureTimeStr: String,
+    val durationMinutes: Int,
+    val legsSummary: String,
+    val savedAtEpochSeconds: Long = Instant.now().epochSecond
 )
 

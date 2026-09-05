@@ -1,6 +1,7 @@
 package com.example.hometravelapp.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,14 +10,25 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,8 +42,12 @@ import com.example.hometravelapp.data.model.JourneyOption
 @Composable
 fun JourneyCard(
     journey: JourneyOption,
+    destinationName: String,
+    onSaveJourney: (JourneyOption, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isSaved by remember { mutableStateOf(false) }
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -45,7 +61,7 @@ fun JourneyCard(
                 .fillMaxWidth()
                 .padding(14.dp)
         ) {
-            // Row 1: Route badge + Headsign + Countdown & 24h Clock
+            // Row 1: Route badge + Headsign + Countdown & 24h Clock + Save Button
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -88,7 +104,7 @@ fun JourneyCard(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(6.dp))
 
                 // Departure time & 24h clock format
                 Column(horizontalAlignment = Alignment.End) {
@@ -106,6 +122,24 @@ fun JourneyCard(
                             fontWeight = FontWeight.SemiBold
                         )
                     }
+                }
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                // Save / Bookmark button
+                IconButton(
+                    onClick = {
+                        isSaved = true
+                        onSaveJourney(journey, destinationName)
+                    },
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Icon(
+                        imageVector = if (isSaved) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                        contentDescription = "Tallenna reitti",
+                        tint = if (isSaved) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
             }
 
@@ -131,9 +165,11 @@ fun JourneyCard(
                 Spacer(modifier = Modifier.height(6.dp))
             }
 
-            // Row 3: Leg breakdown
+            // Row 3: Leg breakdown with horizontal scroll (scrollable to right)
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
