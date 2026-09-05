@@ -10,7 +10,10 @@ A native Android application (Google Pixel and Material You optimized) that prov
 - **Walking Time & Distance Calculation**: Automatically calculates and displays estimated walking time and distance to the nearest bus terminal or subway station (e.g., `🚶‍♂️ Kävely asemälle / pysäkille: 3 min (250 m)`).
 - **Catchable Lines Filter**: Intelligently filters out transit connections that depart too soon, ensuring you only see lines you can walk to and catch in time.
 - **24h Clock & Countdown Departure Times**: Displays both relative countdowns and precise 24h clock departure times (e.g., `7 min (14:09)`).
+- **Saved Routes & Trip History (Bookmarks)**: Bookmark your favorite journey options with the save button (`🔖`) and view your saved routes and departure timings anytime via the bookmark icon in the top toolbar—even after departure time has passed or when offline.
+- **Destination Arrangement / Reordering**: Easily reorder and arrange your saved destinations (Up `▲` / Down `▼` arrows in Settings) to match your personal priority and convenience.
 - **Customizable Starting Location**: Easily set your starting position via live GPS, quick Helsinki presets, address search, or manual coordinates.
+- **Scrollable Route Legs**: Smooth horizontal scrolling for step-by-step route breakdowns ensuring long route descriptions never get cut off.
 - **Material You Dynamic Theming**: Adapts dynamically to your device wallpaper colors and supports Edge-to-Edge display.
 - **Home Screen App Widget**: View quick transit summaries and next departure times to your favorite destinations directly on your home screen.
 - **Offline / Demo Mode**: Built-in Helsinki demonstration dataset allows the app to work instantly even without an internet connection or API key.
@@ -59,7 +62,7 @@ While the app includes a fully functional offline demo mode for central Helsinki
 
 ### 2. Setting Your Starting Position & Destinations
 - Tap the **Starting Location (✏️ Aseta)** card on the home screen to choose whether to use live device GPS or a custom manual starting position (e.g. your home address or office).
-- Use the **Settings (⚙️)** menu or the **+ Lisää** chip to add, edit, or remove your favorite destinations (Home, Work, Shopping Malls, etc.).
+- Use the **Settings (⚙️)** menu or the **+ Lisää** chip to add, edit, reorder (Up/Down arrows), or remove your favorite destinations.
 
 ---
 
