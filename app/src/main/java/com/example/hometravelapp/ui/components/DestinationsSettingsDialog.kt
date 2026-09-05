@@ -19,6 +19,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -55,6 +57,7 @@ fun DestinationsSettingsDialog(
     onSaveApiKey: (String) -> Unit,
     onSaveLocation: (SavedLocation) -> Unit,
     onDeleteLocation: (String) -> Unit,
+    onReorderLocations: (List<SavedLocation>) -> Unit,
     onResetLocations: () -> Unit,
     onSearchAddress: suspend (String) -> List<AddressSearchResult>,
     onFetchCurrentGps: suspend () -> Pair<Double, Double>?
@@ -140,7 +143,7 @@ fun DestinationsSettingsDialog(
                 }
 
                 Text(
-                    text = "Voit muokata kohteiden koordinaatteja tai osoitteita ja poistaa tarpeettomia:",
+                    text = "Voit järjestää, muokata tai poistaa tallennettuja kohteita:",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -149,7 +152,7 @@ fun DestinationsSettingsDialog(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    savedLocations.forEach { loc ->
+                    savedLocations.forEachIndexed { index, loc ->
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
@@ -196,6 +199,46 @@ fun DestinationsSettingsDialog(
                                 }
 
                                 Row(verticalAlignment = Alignment.CenterVertically) {
+                                    // Move Up
+                                    if (index > 0) {
+                                        IconButton(
+                                            onClick = {
+                                                val mutable = savedLocations.toMutableList()
+                                                val prev = mutable[index - 1]
+                                                mutable[index - 1] = mutable[index]
+                                                mutable[index] = prev
+                                                onReorderLocations(mutable)
+                                            },
+                                            modifier = Modifier.size(28.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.KeyboardArrowUp,
+                                                contentDescription = "Siirrä ylös",
+                                                modifier = Modifier.size(18.dp)
+                                            )
+                                        }
+                                    }
+
+                                    // Move Down
+                                    if (index < savedLocations.size - 1) {
+                                        IconButton(
+                                            onClick = {
+                                                val mutable = savedLocations.toMutableList()
+                                                val next = mutable[index + 1]
+                                                mutable[index + 1] = mutable[index]
+                                                mutable[index] = next
+                                                onReorderLocations(mutable)
+                                            },
+                                            modifier = Modifier.size(28.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.KeyboardArrowDown,
+                                                contentDescription = "Siirrä alas",
+                                                modifier = Modifier.size(18.dp)
+                                            )
+                                        }
+                                    }
+
                                     if (!loc.isGps) {
                                         IconButton(
                                             onClick = { locationToEdit = loc },

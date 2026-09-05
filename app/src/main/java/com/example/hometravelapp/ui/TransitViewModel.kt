@@ -91,6 +91,11 @@ class TransitViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun reorderLocations(locations: List<SavedLocation>) {
+        repository.saveLocations(locations)
+        _uiState.update { it.copy(savedLocations = locations) }
+    }
+
     fun deleteLocation(id: String) {
         repository.deleteLocation(id)
         val updated = repository.getSavedLocations()

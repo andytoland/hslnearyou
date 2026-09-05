@@ -141,6 +141,10 @@ class TransitRepository(
         prefs.edit().putString(KEY_SAVED_LOCATIONS, json.encodeToString(DEFAULT_LOCATIONS)).apply()
     }
 
+    fun saveLocations(locations: List<SavedLocation>) {
+        prefs.edit().putString(KEY_SAVED_LOCATIONS, json.encodeToString(locations)).apply()
+    }
+
     fun getSavedJourneys(): List<SavedJourney> {
         val jsonStr = prefs.getString(KEY_SAVED_JOURNEYS, null) ?: return emptyList()
         return try {

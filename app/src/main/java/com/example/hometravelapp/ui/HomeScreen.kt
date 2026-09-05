@@ -418,6 +418,9 @@ fun HomeScreen(
             onDeleteLocation = { id ->
                 viewModel.deleteLocation(id)
             },
+            onReorderLocations = { list ->
+                viewModel.reorderLocations(list)
+            },
             onResetLocations = {
                 viewModel.resetLocationsToDefault()
             },
