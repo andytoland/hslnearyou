@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">HSL Lähellä</string>
+    <string name="nearest_stops_title">Lähimmät pysäkit</string>
+    <string name="refresh">Päivitä</string>
+    <string name="settings">Asetukset</string>
+    <string name="location_permission_needed">Sijaintilupa tarvitaan lähimpien pysäkkien näyttämiseen.</string>
+    <string name="grant_permission">Myönnä lupa</string>
+</resources>
