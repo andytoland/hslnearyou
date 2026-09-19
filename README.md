@@ -66,8 +66,52 @@ While the app includes a fully functional offline demo mode for central Helsinki
 
 ---
 
+## 🤖 AI Assistant / MCP Server (`hsl-routes`)
+
+This project includes a **Model Context Protocol (MCP)** server (`hsl_mcp_server.py`) that lets AI coding assistants (Cline, Antigravity, Claude Desktop, Cursor) query live HSL routes directly in chat:
+
+### Exposed MCP Tools
+- **`plan_hsl_route(from_place, to_place, time="", date="", num_itineraries=3)`**: Plans public transit itineraries between any two locations in the Helsinki region with full line details, departure times, walk legs, and ticket zones.
+- **`get_nearby_hsl_departures(place_or_address, max_stops=3)`**: Returns real-time departure countdowns and live vehicle status for stops near any address or landmark.
+- **`search_hsl_locations(query, max_results=5)`**: Resolves street addresses, stations, and landmarks to coordinates using Digitransit and OpenStreetMap.
+
+### Quick Setup for Cline / Claude Desktop
+Add to your `cline_mcp_settings.json`:
+```json
+"hsl-routes": {
+  "command": "C:/Users/antti/Kehitys/oma/AI/.venv/Scripts/python.exe",
+  "args": [
+    "C:/Users/antti/Kehitys/apps/hslnearyou/hsl_mcp_server.py"
+  ],
+  "cwd": "C:/Users/antti/Kehitys/apps/hslnearyou",
+  "env": {
+    "PYTHONUNBUFFERED": "1",
+    "PYTHONIOENCODING": "utf-8"
+  }
+}
+```
+
+### Quick Setup for Antigravity
+Add to `~/.gemini/config/mcp_config.json`:
+```json
+"hsl-routes": {
+  "command": "C:/Users/antti/Kehitys/oma/AI/.venv/Scripts/python.exe",
+  "args": [
+    "C:/Users/antti/Kehitys/apps/hslnearyou/hsl_mcp_server.py"
+  ],
+  "cwd": "C:/Users/antti/Kehitys/apps/hslnearyou",
+  "env": {
+    "PYTHONUNBUFFERED": "1",
+    "PYTHONIOENCODING": "utf-8"
+  }
+}
+```
+
+---
+
 ## 📄 Open Source License
 
 This project is open-source software licensed under the **MIT License**. 
 
 You are free to use, modify, distribute, and build upon this software for personal or commercial purposes, provided that the copyright notice and permission notice are included in all copies. See the [LICENSE](LICENSE) file for full details.
+
